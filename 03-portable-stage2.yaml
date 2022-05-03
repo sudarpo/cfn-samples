@@ -1,0 +1,36 @@
+# Portable Template Stage 2
+# - Remove BucketName from template
+# - Use parameters to specify KeyPair for EC2
+# - Get latest AMI ID from Public parameters of SSM Parameter Store
+#   More info: https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-public-parameters-ami.html
+
+Parameters:
+  KeyName: 
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Description: 'Specify Key Pair for EC2'
+
+  LatestAmiId:
+    Description: "AMI for EC2"
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+Resources:
+  CatsBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      Tags:
+      - Key: Project
+        Value: ABCD
+
+  EC2AppServer:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: 't3.micro'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'LatestAmiId'
+
+      Tags:
+        - Key: Project
+          Value: ABCD
+        - Key: Name
+          Value: APP Server

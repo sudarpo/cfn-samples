@@ -1,0 +1,16 @@
+# Non Portable Template
+# - It specifies BucketName
+# - It specifies AMI ID of Amazon Linux 2 from US-EAST-1
+
+Resources:
+  BucketInS3:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: 'accatpics13331892739123337'
+
+  ECInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      KeyName: 'kp-us-east-1-northvirgin-main-01'
+      InstanceType: 't3.micro'
+      ImageId: 'ami-0022f774911c1d690'
