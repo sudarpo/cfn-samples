@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  ServiceTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: Service
+      AttributeDefinitions:
+        - AttributeName: key
+          AttributeType: S
+      KeySchema:
+        - AttributeName: key
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 1
+
+  NestedStack:
+    Type: 'AWS::CloudFormation::Stack'
+    DeletionPolicy: Retain
+    Properties:
+      TemplateURL: !Sub 'https://s3.amazonaws.com/cloudformation-templates-${AWS::Region}/EC2ChooseAMI.template'
+      Parameters:
+        InstanceType: 't1.micro'
+        KeyName: 'kp-us-east-1-northvirgin-main-01'
